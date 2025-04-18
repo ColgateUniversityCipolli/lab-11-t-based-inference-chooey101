@@ -45,6 +45,7 @@ $t$ test. - \textbf{The researchers would need approximately 21 observations in 
 
 <<size="scriptsize">>=
 library(pwr)
+library(effectsize)
 suppressPackageStartupMessages(library(tidyverse))
 library(patchwork)
 ###Question 1: Use pwr to find # of obs needed to detect mod to lrg effect
@@ -68,12 +69,7 @@ do to collect the data for Figure 2(g). Note that you only need the
    dopamine in the brains of young zebra finches decreases when
    they sing further away? - \textbf{The data suggests that the dopamine in the brains of young zebra finches does decrease when the song they sing is further from their addult song as all of the observations display a negative change in flourescence for birds who were further from their adult songs.}
   <<size="scriptsize">>=
-fig2data <- read.csv("figure2data.csv")|>
-  rename(
-    closer.vals = X0.275714146,
-    further.vals = X.0.191685046
-  )|>
-mutate(difference = fig2data$closer.vals - fig2data$further.vals)
+fig2data <- read.csv("cleandata.csv")
 further.sum <- fig2data |>
   summarize(
     mean = mean(further.vals, na.rm = TRUE),
@@ -124,8 +120,37 @@ like: ($t=23.99$, $p<0.0001$; $g=1.34$; 95\% CI: 4.43, 4.60).\\
 correction of their $p$-values. I'm waiting to hear back from them via email!
 \begin{enumerate}
   \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).'' - The close finch responses differed significantly from 0 and suggest a large effect size ($t=7.9945$, $p=4.34 \times  10^{-8}$; $g=1.34$; 95\% CI: 0.97, 2.17)
+  <<size="scriptsize">>=
+mu0 = 0
+x <- fig2data$closer.vals
+y <- fig2data$further.vals
+z <- fig2data$difference
+(xbar <- mean(x))
+(s <- sd(x))
+(n <- length(x))
+any(is.na(x))
+x.hedges <- hedges_g(x = x, mu = mu0, alternative = "two.sided")
+interpret_hedges_g(1.34)
+close.t.stat <- t.test(x=x, mu = mu0, alternative = "two.sided")
+x.hedges
+close.t.stat
+@
   \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''  - The further finch responses differed significantly from 0 and suggest a large effect size ($t=-7.4785$, $p=1.34 \times  10^{-7}$; $g=-1.48$; 95\% CI: -2.04, -0.89)
+  <<size="scriptsize">>=
+y.hedges <- hedges_g(x = y, mu = mu0, alternative = "two.sided")
+interpret_hedges_g(-1.48)
+far.t.stat <- t.test(x=y, mu = mu0, alternative = "two.sided")
+y.hedges
+far.t.stat
+@
   \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).'' - The difference between closer and further finch responses differed significantly from one another and suggest a large effect size ($t=8.1073$, $p=3.41 \times  10^{-8}$; $g=1.6$; 95\% CI: 0.99, 2.19).
+<<size="scriptsize">>=
+z.hedges <- hedges_g(x = z, mu = mu0, alternative = "two.sided")
+interpret_hedges_g(1.60)
+diff.t.stat <- t.test(x=z, mu = mu0, alternative = "two.sided")
+z.hedges
+diff.t.stat
+@
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS

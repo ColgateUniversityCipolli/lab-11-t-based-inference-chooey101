@@ -99,6 +99,11 @@ $t$ test. - \textbf{The researchers would need approximately 21 observations in 
 
 
 {\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'pwr' was built under R version 4.4.3}}\begin{alltt}
+\hlkwd{library}\hldef{(effectsize)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'effectsize' was built under R version 4.4.3}}\begin{alltt}
 \hlkwd{suppressPackageStartupMessages}\hldef{(}\hlkwd{library}\hldef{(tidyverse))}
 \hlkwd{library}\hldef{(patchwork)}
 \hlcom{###Question 1: Use pwr to find # of obs needed to detect mod to lrg effect}
@@ -126,30 +131,19 @@ do to collect the data for Figure 2(g). Note that you only need the
 \begin{knitrout}\scriptsize
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hldef{fig2data} \hlkwb{<-} \hlkwd{read.csv}\hldef{(}\hlkwc{file}\hldef{=}\hlsng{"figure2data.csv"}\hldef{)|>}
-\hlkwd{rename}\hldef{(}
-  \hlkwc{closer.vals} \hldef{= X0.275714146,}
-  \hlkwc{further.vals} \hldef{= X.0.191685046}
-\hldef{)|>}
-\hlkwd{mutate}\hldef{(}\hlkwc{difference} \hldef{= fig2data}\hlopt{$}\hldef{closer.vals} \hlopt{-} \hldef{fig2data}\hlopt{$}\hldef{further.vals)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `mutate()`:\\\#\# i In argument: `difference = fig2data\$closer.vals -\\\#\# \ \ fig2data\$further.vals`.\\\#\# Caused by error:\\\#\# ! object 'fig2data' not found}}\begin{alltt}
+\hldef{fig2data} \hlkwb{<-} \hlkwd{read.csv}\hldef{(}\hlsng{"cleandata.csv"}\hldef{)}
 \hldef{further.sum} \hlkwb{<-} \hldef{fig2data |>}
 \hlkwd{summarize}\hldef{(}
   \hlkwc{mean} \hldef{=} \hlkwd{mean}\hldef{(further.vals,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{),}
   \hlkwc{sd} \hldef{=} \hlkwd{sd}\hldef{(further.vals,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{)}
 \hldef{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'fig2data' not found}}\begin{alltt}
 \hldef{further.sum}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'further.sum' not found}}\end{kframe}
+\begin{verbatim}
+##         mean        sd
+## 1 -0.2031844 0.1331014
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
    \item Summarize the closer data. Do the data suggest that
    dopamine in the brains of young zebra finches increases when
@@ -162,15 +156,13 @@ do to collect the data for Figure 2(g). Note that you only need the
  \hlkwc{mean} \hldef{=} \hlkwd{mean}\hldef{(further.vals,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{),}
  \hlkwc{sd} \hldef{=} \hlkwd{sd}\hldef{(further.vals,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{)}
   \hldef{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'fig2data' not found}}\begin{alltt}
 \hldef{closer.sum}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'closer.sum' not found}}\end{kframe}
+\begin{verbatim}
+##         mean        sd
+## 1 -0.2031844 0.1331014
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
   \item Summarize the paired differences. Do the data suggest
   that there is a difference between dopamine in the brains of
@@ -184,15 +176,13 @@ do to collect the data for Figure 2(g). Note that you only need the
   \hlkwc{mean} \hldef{=} \hlkwd{mean}\hldef{(difference,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{),}
   \hlkwc{sd} \hldef{=} \hlkwd{sd}\hldef{(difference,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{)}
 \hldef{)}
-\end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'fig2data' not found}}\begin{alltt}
 \hldef{diff.sum}
 \end{alltt}
-
-
-{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'diff.sum' not found}}\end{kframe}
+\begin{verbatim}
+##        mean        sd
+## 1 0.3544287 0.2141698
+\end{verbatim}
+\end{kframe}
 \end{knitrout}
 \begin{figure}[H]
 \begin{center}
@@ -214,8 +204,147 @@ like: ($t=23.99$, $p<0.0001$; $g=1.34$; 95\% CI: 4.43, 4.60).\\
 correction of their $p$-values. I'm waiting to hear back from them via email!
 \begin{enumerate}
   \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).'' - The close finch responses differed significantly from 0 and suggest a large effect size ($t=7.9945$, $p=4.34 \times  10^{-8}$; $g=1.34$; 95\% CI: 0.97, 2.17)
+\begin{knitrout}\scriptsize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{mu0} \hlkwb{=} \hlnum{0}
+\hldef{x} \hlkwb{<-} \hldef{fig2data}\hlopt{$}\hldef{closer.vals}
+\hldef{y} \hlkwb{<-} \hldef{fig2data}\hlopt{$}\hldef{further.vals}
+\hldef{z} \hlkwb{<-} \hldef{fig2data}\hlopt{$}\hldef{difference}
+\hldef{(xbar} \hlkwb{<-} \hlkwd{mean}\hldef{(x))}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.1512443
+\end{verbatim}
+\begin{alltt}
+\hldef{(s} \hlkwb{<-} \hlkwd{sd}\hldef{(x))}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.09268119
+\end{verbatim}
+\begin{alltt}
+\hldef{(n} \hlkwb{<-} \hlkwd{length}\hldef{(x))}
+\end{alltt}
+\begin{verbatim}
+## [1] 24
+\end{verbatim}
+\begin{alltt}
+\hlkwd{any}\hldef{(}\hlkwd{is.na}\hldef{(x))}
+\end{alltt}
+\begin{verbatim}
+## [1] FALSE
+\end{verbatim}
+\begin{alltt}
+\hldef{x.hedges} \hlkwb{<-} \hlkwd{hedges_g}\hldef{(}\hlkwc{x} \hldef{= x,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{)}
+\hlkwd{interpret_hedges_g}\hldef{(}\hlnum{1.34}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "large"
+## (Rules: cohen1988)
+\end{verbatim}
+\begin{alltt}
+\hldef{close.t.stat} \hlkwb{<-} \hlkwd{t.test}\hldef{(}\hlkwc{x}\hldef{=x,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{)}
+\hldef{x.hedges}
+\end{alltt}
+\begin{verbatim}
+## Hedges' g |       95% CI
+## ------------------------
+## 1.58      | [0.97, 2.17]
+\end{verbatim}
+\begin{alltt}
+\hldef{close.t.stat}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	One Sample t-test
+## 
+## data:  x
+## t = 7.9945, df = 23, p-value = 4.34e-08
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  0.1121084 0.1903801
+## sample estimates:
+## mean of x 
+## 0.1512443
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
   \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''  - The further finch responses differed significantly from 0 and suggest a large effect size ($t=-7.4785$, $p=1.34 \times  10^{-7}$; $g=-1.48$; 95\% CI: -2.04, -0.89)
+\begin{knitrout}\scriptsize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{y.hedges} \hlkwb{<-} \hlkwd{hedges_g}\hldef{(}\hlkwc{x} \hldef{= y,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{)}
+\hlkwd{interpret_hedges_g}\hldef{(}\hlopt{-}\hlnum{1.48}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "large"
+## (Rules: cohen1988)
+\end{verbatim}
+\begin{alltt}
+\hldef{far.t.stat} \hlkwb{<-} \hlkwd{t.test}\hldef{(}\hlkwc{x}\hldef{=y,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{)}
+\hldef{y.hedges}
+\end{alltt}
+\begin{verbatim}
+## Hedges' g |         95% CI
+## --------------------------
+## -1.48     | [-2.04, -0.89]
+\end{verbatim}
+\begin{alltt}
+\hldef{far.t.stat}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	One Sample t-test
+## 
+## data:  y
+## t = -7.4785, df = 23, p-value = 1.337e-07
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  -0.2593882 -0.1469806
+## sample estimates:
+##  mean of x 
+## -0.2031844
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
   \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).'' - The difference between closer and further finch responses differed significantly from one another and suggest a large effect size ($t=8.1073$, $p=3.41 \times  10^{-8}$; $g=1.6$; 95\% CI: 0.99, 2.19).
+\begin{knitrout}\scriptsize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{z.hedges} \hlkwb{<-} \hlkwd{hedges_g}\hldef{(}\hlkwc{x} \hldef{= z,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{)}
+\hlkwd{interpret_hedges_g}\hldef{(}\hlnum{1.60}\hldef{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "large"
+## (Rules: cohen1988)
+\end{verbatim}
+\begin{alltt}
+\hldef{diff.t.stat} \hlkwb{<-} \hlkwd{t.test}\hldef{(}\hlkwc{x}\hldef{=z,} \hlkwc{mu} \hldef{= mu0,} \hlkwc{alternative} \hldef{=} \hlsng{"two.sided"}\hldef{)}
+\hldef{z.hedges}
+\end{alltt}
+\begin{verbatim}
+## Hedges' g |       95% CI
+## ------------------------
+## 1.60      | [0.99, 2.19]
+\end{verbatim}
+\begin{alltt}
+\hldef{diff.t.stat}
+\end{alltt}
+\begin{verbatim}
+## 
+## 	One Sample t-test
+## 
+## data:  z
+## t = 8.1073, df = 23, p-value = 3.41e-08
+## alternative hypothesis: true mean is not equal to 0
+## 95 percent confidence interval:
+##  0.2639927 0.4448646
+## sample estimates:
+## mean of x 
+## 0.3544287
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
