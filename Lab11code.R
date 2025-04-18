@@ -73,18 +73,15 @@ x.hedges <- hedges_g(x = x, mu = mu0, alternative = "two.sided")
 interpret_hedges_g(1.34)
 
 y.hedges <- hedges_g(x = y, mu = mu0, alternative = "two.sided")
-interpret_hedges_g(1.34)
+interpret_hedges_g(-1.48)
 
 z.hedges <- hedges_g(x = z, mu = mu0, alternative = "two.sided")
-interpret_hedges_g(1.34)
+interpret_hedges_g(1.60)
 
 close.t.stat <- t.test(x=x, mu = mu0, alternative = "two.sided")
 far.t.stat <- t.test(x=x, mu = mu0, alternative = "two.sided")
 diff.t.stat <- t.test(x=x, mu = mu0, alternative = "two.sided")
-(x.p.val <- 2*pt(q=-abs(close.t.stat), df = n-1))
-(y.p.val <- 2*pt(q=-abs(far.t.stat), df = n-1))
-(z.p.val <- 2*pt(q=-abs(diff.t.stat), df = n-1))
-# t.test() function does a lot of the heavy lifting
+
 
 #Question 5: Hypothesis test plots
 
