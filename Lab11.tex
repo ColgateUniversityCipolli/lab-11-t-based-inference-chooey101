@@ -84,11 +84,28 @@ of singing, averaged across development.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT A POWER ANALYSIS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \item Using the \texttt{pwr} package for \texttt{R} \citep{pwr},
 conduct a power analysis. How many observations would the researchers 
 need to detect a moderate-to-large effect ($d=0.65$) when using 
 $\alpha=0.05$ and default power (0.80) for a two-sided one sample 
-$t$ test.
+$t$ test. - \textbf{The researchers would need approximately 21 observations in order to detect a moderate-to-large effect while using the parameters listed above.}
+
+\begin{knitrout}\scriptsize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hldef{(pwr)}
+\end{alltt}
+
+
+{\ttfamily\noindent\color{warningcolor}{\#\# Warning: package 'pwr' was built under R version 4.4.3}}\begin{alltt}
+\hlkwd{suppressPackageStartupMessages}\hldef{(}\hlkwd{library}\hldef{(tidyverse))}
+\hlkwd{library}\hldef{(patchwork)}
+\hlcom{###Question 1: Use pwr to find # of obs needed to detect mod to lrg effect}
+\hldef{num.obs} \hlkwb{<-} \hlkwd{pwr.t.test}\hldef{(}\hlkwc{n}\hldef{=}\hlkwa{NULL}\hldef{,} \hlkwc{d} \hldef{=} \hlnum{0.65}\hldef{,} \hlkwc{sig.level} \hldef{=} \hlnum{0.05}\hldef{,} \hlkwc{power} \hldef{=} \hlnum{0.80}\hldef{,} \hlkwc{type}\hldef{=}\hlsng{"one.sample"}\hldef{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COLLECT DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -97,7 +114,7 @@ Figure 2. Download the Excel file. Describe what you needed to
 do to collect the data for Figure 2(g). Note that you only need the 
 \texttt{closer\_vals} and \texttt{further\_vals}. Ensure to 
 \texttt{mutate()} the data to get a difference 
-(e.g., \texttt{closer\_vals - further\_vals}).
+(e.g., \texttt{closer\_vals - further\_vals}). - \textbf{In order to collect the data from the paper, I first had to download the xlsx file from the source data provided within the paper, and then copy it into a blank csv file so that it could be read by R.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SUMMARIZE DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -105,14 +122,84 @@ do to collect the data for Figure 2(g). Note that you only need the
 \begin{enumerate}
   \item Summarize the further data. Do the data suggest that
    dopamine in the brains of young zebra finches decreases when
-   they sing further away?
+   they sing further away? - \textbf{The data suggests that the dopamine in the brains of young zebra finches does decrease when the song they sing is further from their addult song as all of the observations display a negative change in flourescence for birds who were further from their adult songs.}
+\begin{knitrout}\scriptsize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{fig2data} \hlkwb{<-} \hlkwd{read.csv}\hldef{(}\hlkwc{file}\hldef{=}\hlsng{"figure2data.csv"}\hldef{)|>}
+\hlkwd{rename}\hldef{(}
+  \hlkwc{closer.vals} \hldef{= X0.275714146,}
+  \hlkwc{further.vals} \hldef{= X.0.191685046}
+\hldef{)|>}
+\hlkwd{mutate}\hldef{(}\hlkwc{difference} \hldef{= fig2data}\hlopt{$}\hldef{closer.vals} \hlopt{-} \hldef{fig2data}\hlopt{$}\hldef{further.vals)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error in `mutate()`:\\\#\# i In argument: `difference = fig2data\$closer.vals -\\\#\# \ \ fig2data\$further.vals`.\\\#\# Caused by error:\\\#\# ! object 'fig2data' not found}}\begin{alltt}
+\hldef{further.sum} \hlkwb{<-} \hldef{fig2data |>}
+\hlkwd{summarize}\hldef{(}
+  \hlkwc{mean} \hldef{=} \hlkwd{mean}\hldef{(further.vals,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{),}
+  \hlkwc{sd} \hldef{=} \hlkwd{sd}\hldef{(further.vals,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{)}
+\hldef{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'fig2data' not found}}\begin{alltt}
+\hldef{further.sum}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'further.sum' not found}}\end{kframe}
+\end{knitrout}
    \item Summarize the closer data. Do the data suggest that
    dopamine in the brains of young zebra finches increases when
-   they sing closer to their adult song?
+   they sing closer to their adult song? - \textbf{The data suggests that the dopamine in the brains of young zebra finches does increase when the song they sing is closer to their addult song as most of the observations display a positive change in flourescence for birds who were closer to their adult songs.}
+\begin{knitrout}\scriptsize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{closer.sum} \hlkwb{<-} \hldef{fig2data |>}
+  \hlkwd{summarize}\hldef{(}
+ \hlkwc{mean} \hldef{=} \hlkwd{mean}\hldef{(further.vals,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{),}
+ \hlkwc{sd} \hldef{=} \hlkwd{sd}\hldef{(further.vals,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{)}
+  \hldef{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'fig2data' not found}}\begin{alltt}
+\hldef{closer.sum}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'closer.sum' not found}}\end{kframe}
+\end{knitrout}
   \item Summarize the paired differences. Do the data suggest
   that there is a difference between dopamine in the brains of
   young zebra finches when they sing further away compared to 
-  closer to their adult song?
+  closer to their adult song? - \textbf{The data does suggest that there is a difference in finches who sing further away from their adult song than ones who sing closer to it as the difference between the two values remains positive for all observations.}
+\begin{knitrout}\scriptsize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hldef{diff.sum} \hlkwb{<-} \hldef{fig2data |>}
+\hlkwd{summarize}\hldef{(}
+  \hlkwc{mean} \hldef{=} \hlkwd{mean}\hldef{(difference,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{),}
+  \hlkwc{sd} \hldef{=} \hlkwd{sd}\hldef{(difference,} \hlkwc{na.rm} \hldef{=} \hlnum{TRUE}\hldef{)}
+\hldef{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'fig2data' not found}}\begin{alltt}
+\hldef{diff.sum}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'diff.sum' not found}}\end{kframe}
+\end{knitrout}
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{graphicalsummaries.pdf}
+\label{plot1}
+\end{center}
+\end{figure}
   \item \textbf{Optional Challenge:} Can you reproduce Figure 2(g)?
   Note that the you can use \texttt{geom\_errorbar()} to plot
   the range created by adding the mean $\pm$ one standard deviation.
@@ -126,9 +213,9 @@ like: ($t=23.99$, $p<0.0001$; $g=1.34$; 95\% CI: 4.43, 4.60).\\
 \textbf{Note:} Your numbers may vary slightly as they performed some unclear
 correction of their $p$-values. I'm waiting to hear back from them via email!
 \begin{enumerate}
-  \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).''
-  \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''
-  \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).''
+  \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).'' - The close finch responses differed significantly from 0 and suggest a large effect size ($t=7.9945$, $p=4.34 \times  10^{-8}$; $g=1.34$; 95\% CI: 0.97, 2.17)
+  \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''  - The further finch responses differed significantly from 0 and suggest a large effect size ($t=-7.4785$, $p=1.34 \times  10^{-7}$; $g=-1.48$; 95\% CI: -2.04, -0.89)
+  \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).'' - The difference between closer and further finch responses differed significantly from one another and suggest a large effect size ($t=8.1073$, $p=3.41 \times  10^{-8}$; $g=1.6$; 95\% CI: 0.99, 2.19).
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
@@ -139,6 +226,12 @@ hypothesis testing plots for each part of the previous question.
   \item Question 4, part(a).
   \item Question 4, part(b).
   \item Question 4, part(c).
+  \begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{Rplot.pdf}
+\label{plot2}
+\end{center}
+\end{figure}
 \end{enumerate}
 \end{enumerate}
 

@@ -36,11 +36,20 @@ of singing, averaged across development.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT A POWER ANALYSIS
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \item Using the \texttt{pwr} package for \texttt{R} \citep{pwr},
 conduct a power analysis. How many observations would the researchers 
 need to detect a moderate-to-large effect ($d=0.65$) when using 
 $\alpha=0.05$ and default power (0.80) for a two-sided one sample 
-$t$ test.
+$t$ test. - \textbf{The researchers would need approximately 21 observations in order to detect a moderate-to-large effect while using the parameters listed above.}
+
+<<size="scriptsize">>=
+library(pwr)
+suppressPackageStartupMessages(library(tidyverse))
+library(patchwork)
+###Question 1: Use pwr to find # of obs needed to detect mod to lrg effect
+num.obs <- pwr.t.test(n=NULL, d = 0.65, sig.level = 0.05, power = 0.80, type="one.sample")
+@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % COLLECT DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -49,7 +58,7 @@ Figure 2. Download the Excel file. Describe what you needed to
 do to collect the data for Figure 2(g). Note that you only need the 
 \texttt{closer\_vals} and \texttt{further\_vals}. Ensure to 
 \texttt{mutate()} the data to get a difference 
-(e.g., \texttt{closer\_vals - further\_vals}).
+(e.g., \texttt{closer\_vals - further\_vals}). - \textbf{In order to collect the data from the paper, I first had to download the xlsx file from the source data provided within the paper, and then copy it into a blank csv file so that it could be read by R.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % SUMMARIZE DATA
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -57,14 +66,50 @@ do to collect the data for Figure 2(g). Note that you only need the
 \begin{enumerate}
   \item Summarize the further data. Do the data suggest that
    dopamine in the brains of young zebra finches decreases when
-   they sing further away?
+   they sing further away? - \textbf{The data suggests that the dopamine in the brains of young zebra finches does decrease when the song they sing is further from their addult song as all of the observations display a negative change in flourescence for birds who were further from their adult songs.}
+  <<size="scriptsize">>=
+fig2data <- read.csv("figure2data.csv")|>
+  rename(
+    closer.vals = X0.275714146,
+    further.vals = X.0.191685046
+  )|>
+mutate(difference = fig2data$closer.vals - fig2data$further.vals)
+further.sum <- fig2data |>
+  summarize(
+    mean = mean(further.vals, na.rm = TRUE),
+    sd = sd(further.vals, na.rm = TRUE)
+  )
+further.sum
+@
    \item Summarize the closer data. Do the data suggest that
    dopamine in the brains of young zebra finches increases when
-   they sing closer to their adult song?
+   they sing closer to their adult song? - \textbf{The data suggests that the dopamine in the brains of young zebra finches does increase when the song they sing is closer to their addult song as most of the observations display a positive change in flourescence for birds who were closer to their adult songs.}
+   <<size="scriptsize">>=
+closer.sum <- fig2data |>
+  summarize(
+    mean = mean(further.vals, na.rm = TRUE),
+    sd = sd(further.vals, na.rm = TRUE)
+  )
+closer.sum
+@
   \item Summarize the paired differences. Do the data suggest
   that there is a difference between dopamine in the brains of
   young zebra finches when they sing further away compared to 
-  closer to their adult song?
+  closer to their adult song? - \textbf{The data does suggest that there is a difference in finches who sing further away from their adult song than ones who sing closer to it as the difference between the two values remains positive for all observations.}
+  <<size="scriptsize">>=
+diff.sum <- fig2data |>
+  summarize(
+    mean = mean(difference, na.rm = TRUE),
+    sd = sd(difference, na.rm = TRUE)
+  )
+diff.sum
+@
+\begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{graphicalsummaries.pdf}
+\label{plot1}
+\end{center}
+\end{figure}
   \item \textbf{Optional Challenge:} Can you reproduce Figure 2(g)?
   Note that the you can use \texttt{geom\_errorbar()} to plot
   the range created by adding the mean $\pm$ one standard deviation.
@@ -78,9 +123,9 @@ like: ($t=23.99$, $p<0.0001$; $g=1.34$; 95\% CI: 4.43, 4.60).\\
 \textbf{Note:} Your numbers may vary slightly as they performed some unclear
 correction of their $p$-values. I'm waiting to hear back from them via email!
 \begin{enumerate}
-  \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).''
-  \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''
-  \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).''
+  \item ``The close responses differed significantly from 0 ($p=1.63 \times 10^{-8}$).'' - The close finch responses differed significantly from 0 and suggest a large effect size ($t=7.9945$, $p=4.34 \times  10^{-8}$; $g=1.34$; 95\% CI: 0.97, 2.17)
+  \item ``The far responses differed significantly from 0 ($p=5.17 \times 10^{-8}$).''  - The further finch responses differed significantly from 0 and suggest a large effect size ($t=-7.4785$, $p=1.34 \times  10^{-7}$; $g=-1.48$; 95\% CI: -2.04, -0.89)
+  \item ``The difference between populations was significant ($p=1.04 \times10^{-8}$).'' - The difference between closer and further finch responses differed significantly from one another and suggest a large effect size ($t=8.1073$, $p=3.41 \times  10^{-8}$; $g=1.6$; 95\% CI: 0.99, 2.19).
 \end{enumerate}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONDUCT THE TESTS
@@ -91,6 +136,12 @@ hypothesis testing plots for each part of the previous question.
   \item Question 4, part(a).
   \item Question 4, part(b).
   \item Question 4, part(c).
+  \begin{figure}[H]
+\begin{center}
+\includegraphics[scale=0.5]{Rplot.pdf}
+\label{plot2}
+\end{center}
+\end{figure}
 \end{enumerate}
 \end{enumerate}
 
